@@ -35,70 +35,30 @@ class EmailService:
             bool: True si envoyé avec succès
         """
         try:
-            # Email à l'équipe Memphis IT
+            logger.info(f"Tentative d'envoi email de {email} avec sender {self.sender_email}")
+            
+            # Email simple à l'équipe Memphis IT
             admin_subject = f"[Contact Website] {sujet}"
             
             admin_html_content = f"""
             <html>
-                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                        <div style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); padding: 30px; border-radius: 10px; margin-bottom: 30px;">
-                            <h1 style="color: white; margin: 0; text-align: center;">
-                                Memphis Ingénierie & Technologies
-                            </h1>
-                            <p style="color: #e2e8f0; margin: 10px 0 0 0; text-align: center;">
-                                Nouveau message de contact depuis le site web
-                            </p>
-                        </div>
-                        
-                        <div style="background: #f8fafc; padding: 25px; border-radius: 10px; margin-bottom: 25px;">
-                            <h2 style="color: #1e3a8a; margin-top: 0;">Informations du contact</h2>
-                            <table style="width: 100%; border-collapse: collapse;">
-                                <tr>
-                                    <td style="padding: 8px 0; font-weight: bold; color: #475569;">Nom:</td>
-                                    <td style="padding: 8px 0; color: #334155;">{nom}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px 0; font-weight: bold; color: #475569;">Email:</td>
-                                    <td style="padding: 8px 0; color: #334155;">
-                                        <a href="mailto:{email}" style="color: #1e3a8a; text-decoration: none;">{email}</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px 0; font-weight: bold; color: #475569;">Sujet:</td>
-                                    <td style="padding: 8px 0; color: #334155;">{sujet}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px 0; font-weight: bold; color: #475569;">Date:</td>
-                                    <td style="padding: 8px 0; color: #334155;">{datetime.now().strftime('%d/%m/%Y à %H:%M')}</td>
-                                </tr>
-                            </table>
-                        </div>
-                        
-                        <div style="background: white; padding: 25px; border-radius: 10px; border-left: 4px solid #1e3a8a;">
-                            <h3 style="color: #1e3a8a; margin-top: 0;">Message</h3>
-                            <div style="background: #f1f5f9; padding: 20px; border-radius: 8px;">
-                                <p style="margin: 0; white-space: pre-wrap; line-height: 1.6;">{message}</p>
-                            </div>
-                        </div>
-                        
-                        <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                            <p style="color: #64748b; font-size: 14px; margin: 0;">
-                                Cet email a été envoyé automatiquement depuis le formulaire de contact du site web Memphis IT.
-                            </p>
-                        </div>
+                <body style="font-family: Arial, sans-serif;">
+                    <h2>Nouveau message de contact</h2>
+                    <p><strong>Nom:</strong> {nom}</p>
+                    <p><strong>Email:</strong> {email}</p>
+                    <p><strong>Sujet:</strong> {sujet}</p>
+                    <p><strong>Message:</strong></p>
+                    <div style="background: #f5f5f5; padding: 15px; border-left: 3px solid #007bff;">
+                        <p>{message}</p>
                     </div>
                 </body>
             </html>
             """
 
-            # Créer le message pour l'admin
+            # Créer le message pour l'admin - Test avec une seule adresse d'abord
             admin_mail = Mail(
                 from_email=self.sender_email,
-                to_emails=[
-                    To(email='contact@sambare.fr'),
-                    To(email='direction@sambare.fr')
-                ],
+                to_emails='contact@sambare.fr',  # Une seule adresse pour débugger
                 subject=admin_subject,
                 html_content=admin_html_content
             )
@@ -109,11 +69,16 @@ class EmailService:
             # Envoyer l'email admin
             response = self.sendgrid_client.send(admin_mail)
             
-            # Envoyer email de confirmation au client
-            self._send_confirmation_email(nom, email, sujet)
+            logger.info(f"Email admin envoyé. Status: {response.status_code}")
             
-            logger.info(f"Email de contact envoyé avec succès. Status: {response.status_code}")
-            return response.status_code == 202
+            if response.status_code == 202:
+                # Envoyer email de confirmation au client
+                self._send_confirmation_email(nom, email, sujet)
+                logger.info("Email de confirmation envoyé")
+                return True
+            else:
+                logger.error(f"Échec envoi email admin. Status: {response.status_code}")
+                return False
 
         except Exception as e:
             logger.error(f"Erreur lors de l'envoi de l'email de contact: {str(e)}")
