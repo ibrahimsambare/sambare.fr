@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { MapPin, Phone, Mail, Send, CheckCircle } from "lucide-react";
-import { mockContactSubmission } from "../utils/mock";
+import { MapPin, Phone, Mail, Send, CheckCircle, AlertCircle } from "lucide-react";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const ContactSection = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ const ContactSection = () => {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitResult, setSubmitResult] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,37 +24,74 @@ const ContactSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitResult(null);
 
     try {
-      // Utilisation des données mockées pour l'instant
-      await mockContactSubmission(formData);
-      setIsSubmitted(true);
-      setFormData({
-        nom: "",
-        email: "",
-        sujet: "",
-        message: ""
+      const response = await fetch(`${BACKEND_URL}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitResult({
+          type: 'success',
+          message: result.message
+        });
+        setFormData({
+          nom: "",
+          email: "",
+          sujet: "",
+          message: ""
+        });
+      } else {
+        setSubmitResult({
+          type: 'error',
+          message: result.detail || result.message || "Une erreur s'est produite lors de l'envoi."
+        });
+      }
     } catch (error) {
       console.error("Erreur lors de l'envoi:", error);
+      setSubmitResult({
+        type: 'error',
+        message: "Erreur de connexion. Veuillez vérifier votre connexion internet et réessayer."
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isSubmitted) {
+  const resetForm = () => {
+    setSubmitResult(null);
+    setFormData({
+      nom: "",
+      email: "",
+      sujet: "",
+      message: ""
+    });
+  };
+
+  // Affichage du message de succès
+  if (submitResult?.type === 'success') {
     return (
       <section id="contact" className="py-20 bg-blue-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-white rounded-2xl p-12 shadow-lg">
             <CheckCircle className="mx-auto text-green-600 mb-6" size={64} />
             <h3 className="text-3xl font-bold text-slate-900 mb-4">Message envoyé avec succès !</h3>
-            <p className="text-lg text-slate-600 mb-8">
-              Nous avons bien reçu votre message et vous répondrons dans les plus brefs délais.
+            <p className="text-lg text-slate-600 mb-4">
+              {submitResult.message}
+            </p>
+            <p className="text-slate-500 mb-8">
+              Vous recevrez également un email de confirmation à l'adresse fournie.
             </p>
             <button
-              onClick={() => setIsSubmitted(false)}
-              className="bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-300"
+              onClick={resetForm}
+              className="bg-blue-900 hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl"
             >
               Envoyer un autre message
             </button>
@@ -134,6 +172,17 @@ const ContactSection = () => {
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold text-slate-900 mb-8">Envoyez-nous un message</h3>
               
+              {/* Affichage des erreurs */}
+              {submitResult?.type === 'error' && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
+                  <AlertCircle className="text-red-500 mt-0.5" size={20} />
+                  <div>
+                    <p className="text-red-800 font-medium">Erreur lors de l'envoi</p>
+                    <p className="text-red-600 text-sm mt-1">{submitResult.message}</p>
+                  </div>
+                </div>
+              )}
+              
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
@@ -147,7 +196,8 @@ const ContactSection = () => {
                       value={formData.nom}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200 disabled:bg-slate-100 disabled:cursor-not-allowed"
                       placeholder="Votre nom complet"
                     />
                   </div>
@@ -163,7 +213,8 @@ const ContactSection = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200"
+                      disabled={isSubmitting}
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200 disabled:bg-slate-100 disabled:cursor-not-allowed"
                       placeholder="votre.email@exemple.com"
                     />
                   </div>
@@ -180,7 +231,8 @@ const ContactSection = () => {
                     value={formData.sujet}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200"
+                    disabled={isSubmitting}
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200 disabled:bg-slate-100 disabled:cursor-not-allowed"
                     placeholder="Sujet de votre demande"
                   />
                 </div>
@@ -195,8 +247,9 @@ const ContactSection = () => {
                     value={formData.message}
                     onChange={handleInputChange}
                     required
+                    disabled={isSubmitting}
                     rows={6}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200 resize-none"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-blue-900 transition-colors duration-200 resize-none disabled:bg-slate-100 disabled:cursor-not-allowed"
                     placeholder="Décrivez votre projet ou votre demande..."
                   />
                 </div>
@@ -204,7 +257,7 @@ const ContactSection = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-blue-900 hover:bg-blue-800 disabled:bg-slate-400 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none"
+                  className="w-full bg-blue-900 hover:bg-blue-800 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:transform-none"
                 >
                   {isSubmitting ? (
                     <>
