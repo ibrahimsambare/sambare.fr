@@ -13,7 +13,7 @@ class EmailDeliveryError(Exception):
 class EmailService:
     def __init__(self):
         self.sendgrid_client = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        self.sender_email = os.environ.get('SENDER_EMAIL', 'contact@memphis-it.com')
+        self.sender_email = os.environ.get('SENDER_EMAIL', 'contact@sambare.fr')
     
     def send_contact_form_email(self, nom: str, email: str, sujet: str, message: str) -> bool:
         """
