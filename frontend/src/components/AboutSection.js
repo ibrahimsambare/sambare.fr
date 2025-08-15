@@ -36,7 +36,7 @@ const AboutSection = () => {
           <div className="bg-white rounded-2xl p-8 shadow-lg">
             <div className="flex items-center space-x-6 mb-8">
               <img
-                src="https://customer-assets.emergentagent.com/job_consulting-experts/artifacts/3rcgrk5d_Photo%20Adamou%20Amadou%20SAMBARE.JPG"
+                src="/assets/DG.jpg"
                 alt="Adamou Amadou SAMBARE"
                 className="w-24 h-24 rounded-full object-cover border-4 border-blue-900"
               />
