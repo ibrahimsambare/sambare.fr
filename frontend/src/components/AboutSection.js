@@ -56,7 +56,7 @@ const AboutSection = () => {
               </div>
 
               <div className="flex items-start space-x-4">
-                <Globe className="text-blue-900 mt-1" size={24} />
+                <Globe className="text-blue-900 mt-1" size={16} />
                 <div>
                   <h4 className="font-bold text-slate-900 mb-2">Langues</h4>
                   <p className="text-slate-600">Français, Anglais, Haoussa</p>
@@ -64,7 +64,7 @@ const AboutSection = () => {
               </div>
 
               <div className="flex items-start space-x-4">
-                <Award className="text-blue-900 mt-1" size={24} />
+                <Award className="text-blue-900 mt-1" size={36} />
                 <div>
                   <h4 className="font-bold text-slate-900 mb-2">Expertise</h4>
                   <p className="text-slate-600">
