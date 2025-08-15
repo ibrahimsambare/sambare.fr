@@ -79,7 +79,7 @@ const Footer = () => {
               
               <div className="flex items-center space-x-3">
                 <Mail size={18} className="flex-shrink-0" />
-                <p>contact@memphis-it.com</p>
+                <p>contact@sambare.fr</p>
               </div>
             </div>
           </div>
