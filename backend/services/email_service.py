@@ -90,8 +90,8 @@ class EmailService:
             admin_mail = Mail(
                 from_email=self.sender_email,
                 to_emails=[
-                    To(email='contact@memphis-it.com'),
-                    To(email='direction@memphis-it.com')
+                    To(email='contact@sambare.fr'),
+                    To(email='direction@sambare.fr')
                 ],
                 subject=admin_subject,
                 html_content=admin_html_content
