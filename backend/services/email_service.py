@@ -12,8 +12,14 @@ class EmailDeliveryError(Exception):
 
 class EmailService:
     def __init__(self):
-        self.sendgrid_client = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+        api_key = os.environ.get('SENDGRID_API_KEY')
         self.sender_email = os.environ.get('SENDER_EMAIL', 'contact@sambare.fr')
+        
+        logger.info(f"Configuration EmailService - Sender: {self.sender_email}")
+        logger.info(f"Configuration EmailService - API Key present: {bool(api_key)}")
+        logger.info(f"Configuration EmailService - API Key prefix: {api_key[:10] if api_key else 'None'}")
+        
+        self.sendgrid_client = SendGridAPIClient(api_key)
     
     def send_contact_form_email(self, nom: str, email: str, sujet: str, message: str) -> bool:
         """
