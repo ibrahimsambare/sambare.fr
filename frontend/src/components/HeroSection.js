@@ -58,7 +58,7 @@ const HeroSection = () => {
           <div className="relative">
             <div className="relative overflow-hidden rounded-2xl shadow-2xl">
               <img
-                src="https://customer-assets.emergentagent.com/job_consulting-experts/artifacts/3rcgrk5d_Photo%20Adamou%20Amadou%20SAMBARE.JPG"
+                src="/assets/DG.jpg"
                 alt="Adamou Amadou SAMBARE - Directeur Général"
                 className="w-full h-[600px] object-cover"
               />
