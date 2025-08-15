@@ -3,7 +3,7 @@ name: Deploy frontend to GitHub Pages
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -17,6 +17,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,48 +31,50 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install deps
-        working-directory: frontend
-        run: npm ci
-
-      - name: Build frontend
+      - name: Install deps (frontend)
         working-directory: frontend
         run: |
-          # Si Vite: npm run build sort dans dist
-          # Si CRA:  npm run build sort dans build
-          npm run build
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Build (frontend)
+        working-directory: frontend
+        run: npm run build
 
       - name: Detect build directory
         id: detect
         run: |
           if [ -d "frontend/dist" ]; then
-            echo "outdir=frontend/dist" >> $GITHUB_OUTPUT
+            echo "outdir=frontend/dist" >> "$GITHUB_OUTPUT"
           elif [ -d "frontend/build" ]; then
-            echo "outdir=frontend/build" >> $GITHUB_OUTPUT
+            echo "outdir=frontend/build" >> "$GITHUB_OUTPUT"
           else
-            echo "❌ Build folder not found"; exit 1
+            echo "❌ Build folder not found (expected frontend/dist or frontend/build)"; exit 1
           fi
+          echo "Using: $(cat "$GITHUB_OUTPUT")"
 
       - name: Add CNAME and SPA 404
         run: |
           OUT="${{ steps.detect.outputs.outdir }}"
           echo "www.sambare.fr" > "$OUT/CNAME"
-          # Copie index.html en 404.html pour les routes client (SPA)
           if [ -f "$OUT/index.html" ]; then
             cp "$OUT/index.html" "$OUT/404.html"
           fi
 
-      - name: Upload artifact
+      - name: Upload artifact to Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.detect.outputs.outdir }}
 
   deploy:
+    runs-on: ubuntu-latest
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
