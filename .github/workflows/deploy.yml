@@ -1,4 +1,4 @@
-name: Deploy frontend to GitHub Pages
+name: Deploy CRA to GitHub Pages
 
 on:
   push:
@@ -17,57 +17,33 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Install deps (frontend)
+      - name: Install deps
         working-directory: frontend
         run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
-      - name: Build (frontend)
+      - name: Build CRA
         working-directory: frontend
         run: npm run build
 
-      - name: Detect build directory
-        id: detect
+      - name: Add CNAME & 404
         run: |
-          if [ -d "frontend/dist" ]; then
-            echo "outdir=frontend/dist" >> "$GITHUB_OUTPUT"
-          elif [ -d "frontend/build" ]; then
-            echo "outdir=frontend/build" >> "$GITHUB_OUTPUT"
-          else
-            echo "❌ Build folder not found (expected frontend/dist or frontend/build)"; exit 1
-          fi
-          echo "Using: $(cat "$GITHUB_OUTPUT")"
+          echo "www.sambare.fr" > frontend/build/CNAME
+          cp frontend/build/index.html frontend/build/404.html
 
-      - name: Add CNAME and SPA 404
-        run: |
-          OUT="${{ steps.detect.outputs.outdir }}"
-          echo "www.sambare.fr" > "$OUT/CNAME"
-          if [ -f "$OUT/index.html" ]; then
-            cp "$OUT/index.html" "$OUT/404.html"
-          fi
-
-      - name: Upload artifact to Pages
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ steps.detect.outputs.outdir }}
+          path: frontend/build
 
   deploy:
     runs-on: ubuntu-latest
@@ -76,6 +52,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
