@@ -9,7 +9,8 @@ from pydantic import BaseModel, Field, EmailStr
 from typing import List
 import uuid
 from datetime import datetime
-from services.email_service import email_service, EmailDeliveryError
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -54,6 +55,47 @@ class ContactResponse(BaseModel):
     message: str
     id: str = None
 
+def send_simple_email(nom: str, email: str, sujet: str, message: str) -> bool:
+    """Fonction simple d'envoi d'email"""
+    try:
+        api_key = os.environ.get('SENDGRID_API_KEY')
+        sender_email = os.environ.get('SENDER_EMAIL', 'contact@sambare.fr')
+        
+        logging.info(f"Envoi email simple - Sender: {sender_email}, API Key present: {bool(api_key)}")
+        
+        sg = SendGridAPIClient(api_key)
+        
+        html_content = f"""
+        <html>
+            <body>
+                <h2>Nouveau message de contact</h2>
+                <p><strong>Nom:</strong> {nom}</p>
+                <p><strong>Email:</strong> {email}</p>
+                <p><strong>Sujet:</strong> {sujet}</p>
+                <p><strong>Message:</strong></p>
+                <div style="background: #f5f5f5; padding: 15px;">
+                    <p>{message}</p>
+                </div>
+            </body>
+        </html>
+        """
+        
+        mail = Mail(
+            from_email=sender_email,
+            to_emails='contact@sambare.fr',
+            subject=f"[Contact] {sujet}",
+            html_content=html_content
+        )
+        
+        response = sg.send(mail)
+        logging.info(f"Email envoyé. Status: {response.status_code}")
+        
+        return response.status_code == 202
+        
+    except Exception as e:
+        logging.error(f"Erreur envoi email simple: {str(e)}")
+        return False
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
@@ -72,7 +114,7 @@ async def create_contact_message(contact_data: ContactMessageCreate):
         result = await db.contact_messages.insert_one(contact_message.dict())
         
         # Envoyer l'email via SendGrid
-        email_sent = email_service.send_contact_form_email(
+        email_sent = send_simple_email(
             nom=contact_data.nom,
             email=contact_data.email,
             sujet=contact_data.sujet,
@@ -98,12 +140,6 @@ async def create_contact_message(contact_data: ContactMessageCreate):
                 id=contact_message.id
             )
             
-    except EmailDeliveryError as e:
-        logging.error(f"Erreur d'envoi d'email: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail="Erreur lors de l'envoi de l'email. Veuillez réessayer plus tard."
-        )
     except Exception as e:
         logging.error(f"Erreur lors du traitement du contact: {str(e)}")
         raise HTTPException(
