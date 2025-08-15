@@ -140,7 +140,7 @@ class EmailService:
                             
                             <div style="background: #f8fafc; padding: 20px; border-radius: 10px; margin: 25px 0;">
                                 <h3 style="color: #1e3a8a; margin-top: 0;">Nos coordonnées</h3>
-                                <p style="margin: 5px 0;"><strong>Email:</strong> contact@memphis-it.com</p>
+                                <p style="margin: 5px 0;"><strong>Email:</strong> contact@sambare.fr</p>
                                 <p style="margin: 5px 0;"><strong>Téléphone:</strong> +227 XX XX XX XX</p>
                                 <p style="margin: 5px 0;"><strong>Adresse:</strong> Niamey, Niger</p>
                             </div>
