@@ -17,9 +17,9 @@ const HeroSection = () => {
           <div className="space-y-8">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
-                Memphis
+                SAMBARE
                 <span className="text-blue-900 block">
-                  Ingénierie & Technologies
+                  Consulting
                 </span>
               </h1>
               
@@ -30,7 +30,7 @@ const HeroSection = () => {
               </p>
               
               <p className="text-lg text-slate-600 leading-relaxed max-w-2xl">
-                Memphis Ingénierie & Technologies accompagne les entreprises, institutions financières, 
+                SAMBARE Consulting accompagne les entreprises, institutions financières, 
                 administrations et organisations internationales dans leurs projets de transformation 
                 digitale et d'optimisation technologique en Afrique et à l'international.
               </p>
