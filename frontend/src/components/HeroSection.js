@@ -30,7 +30,7 @@ const HeroSection = () => {
               </p>
               
               <p className="text-lg text-slate-600 leading-relaxed max-w-2xl">
-                Adamou SAMBARE, comsultant interntional senior accompagne les entreprises, institutions financières, 
+                Adamou SAMBARE, consultant interntional senior accompagne les entreprises, institutions financières, 
                 administrations et organisations internationales dans leur développement et la mise en oeuvre de leurs projets en Afrique et à l'international.
               </p>
             </div>
