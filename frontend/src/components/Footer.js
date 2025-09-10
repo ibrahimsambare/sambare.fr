@@ -89,7 +89,7 @@ const Footer = () => {
         <div className="border-t border-slate-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-slate-400 text-center md:text-left">
-              © 2024 SAMBARE Consulting. Tous droits réservés.
+              © 2025 SAMBARE Conseil. Tous droits réservés.
             </p>
             
             <div className="flex space-x-6 text-slate-400">
