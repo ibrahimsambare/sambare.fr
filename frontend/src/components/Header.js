@@ -20,7 +20,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <img
               src="logo.svg"
-              alt="Memphis Ingénierie & Technologies"
+              alt="Sambare Conseil"
               className="h-12 w-auto"
             />
           </div>
