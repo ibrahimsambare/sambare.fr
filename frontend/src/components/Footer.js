@@ -9,7 +9,7 @@ const Footer = () => {
           {/* Logo et description */}
           <div className="lg:col-span-2 space-y-6">
             <img
-              src="logo.svg"
+              src="%PUBLIC_URL%/favicon.png"
               alt="SAMBARE Conseil"
               className="h-16 w-auto brightness-0 invert"
             />
