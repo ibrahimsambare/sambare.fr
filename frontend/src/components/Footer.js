@@ -9,12 +9,12 @@ const Footer = () => {
           {/* Logo et description */}
           <div className="lg:col-span-2 space-y-6">
             <img
-              src="https://customer-assets.emergentagent.com/job_consulting-experts/artifacts/mz5hz45k_Logo%20MIT.png"
-              alt="SAMBARE Consulting"
+              src="logo.svg"
+              alt="SAMBARE Conseil"
               className="h-16 w-auto brightness-0 invert"
             />
             <p className="text-slate-300 max-w-md leading-relaxed">
-              SAMBARE Consulting, votre partenaire de confiance pour 
+              SAMBARE Conseil, votre partenaire de confiance pour 
               l'accompagnement dans vos projets stratégiques et technologiques en 
               Afrique et à l'international.
             </p>
@@ -74,7 +74,8 @@ const Footer = () => {
               
               <div className="flex items-center space-x-3">
                 <Phone size={18} className="flex-shrink-0" />
-                <p>+227 XX XX XX XX</p>
+                <p>+227 90 72 20 30 </p>
+                <p>+225 07 57 85 64 76 </p>
               </div>
               
               <div className="flex items-center space-x-3">
