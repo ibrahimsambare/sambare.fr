@@ -30,9 +30,8 @@ const HeroSection = () => {
               </p>
               
               <p className="text-lg text-slate-600 leading-relaxed max-w-2xl">
-                SAMBARE Conseil accompagne les entreprises, institutions financières, 
-                administrations et organisations internationales dans leurs projets de transformation 
-                digitale et d'optimisation technologique en Afrique et à l'international.
+                Adamou SAMBARE, comsultant interntional senior accompagne les entreprises, institutions financières, 
+                administrations et organisations internationales dans leur développement et la mise en oeuvre de leurs projets en Afrique et à l'international.
               </p>
             </div>
 
