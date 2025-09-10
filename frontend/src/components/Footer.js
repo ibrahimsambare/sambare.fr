@@ -7,12 +7,13 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Logo et description */}
-          <div className="lg:col-span-2 space-y-6">
-            <img
-              src="/favicon.png"
-              alt="SAMBARE Conseil"
-              className="h-16 w-auto brightness-0 invert"
-            />
+           <div className="flex items-center space-x-3">
+              <img
+                src="logo.svg"
+                alt="Sambare Conseil"
+                className="h-12 w-auto"
+              />
+            </div>
             <p className="text-slate-300 max-w-md leading-relaxed">
               SAMBARE Conseil, votre partenaire de confiance pour 
               l'accompagnement dans vos projets stratégiques et technologiques en 
