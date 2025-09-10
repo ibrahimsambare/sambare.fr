@@ -138,8 +138,8 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-bold text-slate-900 mb-2">Téléphone</h4>
                     <p className="text-slate-600">
-                      +227 XX XX XX XX<br />
-                      +227 XX XX XX XX
+                      +227 90 72 20 30<br />
+                      +225 07 57 85 64 76
                     </p>
                   </div>
                 </div>
@@ -149,8 +149,7 @@ const ContactSection = () => {
                   <div>
                     <h4 className="font-bold text-slate-900 mb-2">Email</h4>
                     <p className="text-slate-600">
-                      contact@sambare.fr<br />
-                      direction@sambare.fr
+                      contact@sambare.fr
                     </p>
                   </div>
                 </div>
