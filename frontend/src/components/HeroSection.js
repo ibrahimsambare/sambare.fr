@@ -19,18 +19,18 @@ const HeroSection = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
                 SAMBARE
                 <span className="text-blue-900 block">
-                  Consulting
+                  Conseil
                 </span>
               </h1>
               
               <div className="w-24 h-1 bg-blue-900 rounded"></div>
               
               <p className="text-xl md:text-2xl text-blue-900 font-semibold">
-                Des solutions sur mesure pour vos projets stratégiques et technologiques
+                Des solutions sur mesure pour vos projets stratégiques et technologiques en Afrique et à l'international.
               </p>
               
               <p className="text-lg text-slate-600 leading-relaxed max-w-2xl">
-                SAMBARE Consulting accompagne les entreprises, institutions financières, 
+                SAMBARE Conseil accompagne les entreprises, institutions financières, 
                 administrations et organisations internationales dans leurs projets de transformation 
                 digitale et d'optimisation technologique en Afrique et à l'international.
               </p>
