@@ -42,7 +42,7 @@ const AboutSection = () => {
               />
               <div>
                 <h3 className="text-2xl font-bold text-slate-900">Adamou Amadou SAMBARE</h3>
-                <p className="text-blue-900 font-semibold text-lg">Directeur Général</p>
+                <p className="text-blue-900 font-semibold text-lg">CEO</p>
               </div>
             </div>
 
