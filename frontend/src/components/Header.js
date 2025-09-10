@@ -19,7 +19,7 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img
-              src="https://customer-assets.emergentagent.com/job_consulting-experts/artifacts/mz5hz45k_Logo%20MIT.png"
+              src="logo.svg"
               alt="Memphis Ingénierie & Technologies"
               className="h-12 w-auto"
             />
