@@ -95,10 +95,7 @@ const Footer = () => {
             
             <div className="flex space-x-6 text-slate-400">
               <a href="#" className="hover:text-white transition-colors duration-200">
-                Mentions légales
-              </a>
-              <a href="#" className="hover:text-white transition-colors duration-200">
-                Politique de confidentialité
+                Conditions Générales d'Utilisation
               </a>
             </div>
           </div>
